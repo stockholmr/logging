@@ -66,7 +66,15 @@ func stdFormat(msg *Message, timeFormat string) string {
 func csvFormat(msg *Message, timeFormat string) string {
 	buf := msg.time.Format(timeFormat) + ","
 	buf += msg.level + ","
-	buf += strings.Replace(strings.TrimSpace(msg.message), ",", "_", -1)
+	for i, o := range msg.csvMessage {
+		v := fmt.Sprint(o)
+		v = strings.Replace(strings.TrimSpace(v), ",", "_", -1)
+		if i < len(msg.csvMessage)-1 {
+			buf += fmt.Sprint(v) + ","
+		} else {
+			buf += fmt.Sprint(v)
+		}
+	}
 	buf += "\n"
 	return buf
 }

@@ -29,6 +29,9 @@ func NewFileLogger(format int) *FileLogger {
 		format:     format,
 	}
 	logger.baseLogger.log = logger.Log
+	if format == FORMAT_CSV {
+		logger.baseLogger.useCSVFormat = true
+	}
 	return logger
 }
 
