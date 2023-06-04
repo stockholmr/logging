@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	REQUEST = iota
-	DEBUG
+	DEBUG = iota
 	INFO
+	REQUEST
 	ERROR
 	FATAL
 
