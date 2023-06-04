@@ -3,13 +3,13 @@ package logging
 import "time"
 
 type Message struct {
-	level      string
+	level      int
 	message    string
 	time       time.Time
 	csvMessage []interface{}
 }
 
-func NewMessage(level string, message string) *Message {
+func NewMessage(level int, message string) *Message {
 	return &Message{
 		level:   level,
 		message: message,
@@ -17,7 +17,7 @@ func NewMessage(level string, message string) *Message {
 	}
 }
 
-func NewCSVMessage(level string, message ...interface{}) *Message {
+func NewCSVMessage(level int, message ...interface{}) *Message {
 	return &Message{
 		level:      level,
 		csvMessage: message,

@@ -20,13 +20,15 @@ type FileLogger struct {
 	out        *os.File
 	timeFormat string
 	format     int
+	level      int
 }
 
-func NewFileLogger(format int) *FileLogger {
+func NewFileLogger(level int, format int) *FileLogger {
 	logger := &FileLogger{
 		closed:     false,
 		timeFormat: TIMEFORMAT,
 		format:     format,
+		level:      level,
 	}
 	logger.baseLogger.log = logger.Log
 	if format == FORMAT_CSV {
@@ -67,8 +69,10 @@ func (f *FileLogger) Close() {
 }
 
 func (f *FileLogger) Log(msg *Message) {
-	f.queue <- msg
-	recover()
+	if msg.level >= f.level {
+		f.queue <- msg
+		recover()
+	}
 }
 
 func (f *FileLogger) write(msg *Message) {

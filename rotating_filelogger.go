@@ -26,14 +26,16 @@ type RotatingFileLogger struct {
 	maxFileCount  int
 	lineCount     int64
 	maxLines      int64
+	level         int
 }
 
-func NewRotatingFileLogger(logDir string, logFilename string, fileExtension string, format int, maxLines int64, maxFiles int) *RotatingFileLogger {
+func NewRotatingFileLogger(logDir string, logFilename string, fileExtension string, level int, format int, maxLines int64, maxFiles int) *RotatingFileLogger {
 	logger := &RotatingFileLogger{
 		fileLogger: &FileLogger{
 			closed:     false,
 			timeFormat: TIMEFORMAT,
 			format:     format,
+			level:      level,
 		},
 
 		filePath:     logDir,
@@ -41,6 +43,7 @@ func NewRotatingFileLogger(logDir string, logFilename string, fileExtension stri
 		fileExt:      fileExtension,
 		maxLines:     maxLines,
 		maxFileCount: maxFiles,
+		level:        level,
 	}
 	logger.baseLogger.log = logger.Log
 	if format == FORMAT_CSV {
@@ -168,10 +171,12 @@ func (r *RotatingFileLogger) Close() {
 }
 
 func (r *RotatingFileLogger) Log(msg *Message) {
-	r.fileLogger.Log(msg)
-	r.lineCount++
-	if r.lineCount >= r.maxLines {
-		r.rotate()
+	if msg.level >= r.level {
+		r.fileLogger.Log(msg)
+		r.lineCount++
+		if r.lineCount >= r.maxLines {
+			r.rotate()
+		}
 	}
 }
 

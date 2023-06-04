@@ -6,12 +6,13 @@ import (
 )
 
 const (
-	ERROR      string = "ERROR"
-	INFO       string = "INFO"
-	DEBUG      string = "DEBUG"
-	FATAL      string = "FATAL"
-	REQUEST    string = "REQUEST"
-	TIMEFORMAT        = "2006-01-02 15:04:05"
+	REQUEST = iota
+	DEBUG
+	INFO
+	ERROR
+	FATAL
+
+	TIMEFORMAT = "2006-01-02 15:04:05"
 )
 
 var defaultLog Logger
@@ -25,7 +26,7 @@ type Logger interface {
 }
 
 func init() {
-	defaultLog = NewConsoleLogger()
+	defaultLog = NewConsoleLogger(INFO)
 }
 
 func SetLogger(l Logger) {
@@ -33,7 +34,7 @@ func SetLogger(l Logger) {
 }
 
 func Error(v ...interface{}) {
-	defaultLog.Error(NewMessage(ERROR, fmt.Sprint(v...)))
+	defaultLog.Error(fmt.Sprint(v...))
 }
 
 func Info(v ...interface{}) {
@@ -41,20 +42,20 @@ func Info(v ...interface{}) {
 }
 
 func Debug(v ...interface{}) {
-	defaultLog.Debug(NewMessage(DEBUG, fmt.Sprint(v...)))
+	defaultLog.Debug(fmt.Sprint(v...))
 }
 
 func Request(v ...interface{}) {
-	defaultLog.Request(NewMessage(REQUEST, fmt.Sprint(v...)))
+	defaultLog.Request(fmt.Sprint(v...))
 }
 
 func Fatal(v ...interface{}) {
-	defaultLog.Fatal(NewMessage(FATAL, fmt.Sprint(v...)))
+	defaultLog.Fatal(fmt.Sprint(v...))
 }
 
 func stdFormat(msg *Message, timeFormat string) string {
 	buf := msg.time.Format(timeFormat)
-	buf += " [" + msg.level + "]"
+	buf += " [" + getLevelName(msg.level) + "]"
 	buf += " " + msg.message
 
 	if len(msg.message) > 0 && msg.message[len(msg.message)-1] != '\n' {
@@ -65,7 +66,7 @@ func stdFormat(msg *Message, timeFormat string) string {
 
 func csvFormat(msg *Message, timeFormat string) string {
 	buf := msg.time.Format(timeFormat) + ","
-	buf += msg.level + ","
+	buf += getLevelName(msg.level) + ","
 	for i, o := range msg.csvMessage {
 		v := fmt.Sprint(o)
 		v = strings.Replace(strings.TrimSpace(v), ",", "_", -1)
@@ -77,4 +78,21 @@ func csvFormat(msg *Message, timeFormat string) string {
 	}
 	buf += "\n"
 	return buf
+}
+
+func getLevelName(level int) string {
+	switch level {
+	case REQUEST:
+		return "REQUEST"
+	case INFO:
+		return "INFO"
+	case DEBUG:
+		return "DEBUG"
+	case ERROR:
+		return "ERROR"
+	case FATAL:
+		return "FATAL"
+	default:
+		return ""
+	}
 }
