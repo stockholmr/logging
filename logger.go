@@ -54,10 +54,23 @@ func Fatal(v ...interface{}) {
 	defaultLog.Fatal(fmt.Sprint(v...))
 }
 
+func joinSlice(s []interface{}, delimiter string) string {
+	var str string
+	for i, o := range s {
+		v := strings.TrimSpace(fmt.Sprint(o))
+		if i < len(s)-1 {
+			str += v + delimiter
+		} else {
+			str += v
+		}
+	}
+	return str
+}
+
 func stdFormat(msg *Message, timeFormat string) string {
 	buf := msg.time.Format(timeFormat)
 	buf += " [" + getLevelName(msg.level) + "]"
-	buf += " " + msg.message
+	buf += " " + joinSlice(msg.message, " ")
 
 	if len(msg.message) > 0 && msg.message[len(msg.message)-1] != '\n' {
 		buf += "\n"
@@ -68,15 +81,7 @@ func stdFormat(msg *Message, timeFormat string) string {
 func csvFormat(msg *Message, timeFormat string) string {
 	buf := msg.time.Format(timeFormat) + ","
 	buf += getLevelName(msg.level) + ","
-	for i, o := range msg.csvMessage {
-		v := fmt.Sprint(o)
-		v = strings.Replace(strings.TrimSpace(v), ",", "_", -1)
-		if i < len(msg.csvMessage)-1 {
-			buf += fmt.Sprint(v) + ","
-		} else {
-			buf += fmt.Sprint(v)
-		}
-	}
+	buf += joinSlice(msg.message, ",")
 	buf += "\n"
 	return buf
 }

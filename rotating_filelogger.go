@@ -46,10 +46,6 @@ func NewRotatingFileLogger(logDir string, logFilename string, fileExtension stri
 		level:        level,
 	}
 	logger.baseLogger.log = logger.Log
-	if format == FORMAT_CSV {
-		logger.baseLogger.useCSVFormat = true
-		logger.fileLogger.baseLogger.useCSVFormat = true
-	}
 
 	if logger.fileExt[0:1] != "." {
 		logger.fileExt = "." + logger.fileExt
