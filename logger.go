@@ -7,8 +7,8 @@ import (
 
 const (
 	DEBUG = iota
-	INFO
 	REQUEST
+	INFO
 	ERROR
 	FATAL
 
