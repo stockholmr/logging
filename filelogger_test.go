@@ -23,7 +23,7 @@ func TestFileLogger(t *testing.T) {
 		t.Error(err)
 	}
 
-	logger := NewFileLogger(FORMAT_STD)
+	logger := NewFileLogger(INFO, FORMAT_STD)
 	logger.Open(file)
 	logger.Info("TEST")
 	logger.Close()
@@ -37,7 +37,7 @@ func TestFileLogger_TestStopStart(t *testing.T) {
 		t.Error(err)
 	}
 
-	logger := NewFileLogger(FORMAT_STD)
+	logger := NewFileLogger(INFO, FORMAT_STD)
 	logger.Open(file)
 	logger.Info("TEST")
 	logger.Close()
