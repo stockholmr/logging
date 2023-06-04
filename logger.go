@@ -71,7 +71,7 @@ func csvFormat(msg *Message, timeFormat string) string {
 	for i, o := range msg.csvMessage {
 		v := fmt.Sprint(o)
 		v = strings.Replace(strings.TrimSpace(v), ",", "_", -1)
-		if i < len(msg.csvMessage)-1 {
+		if i < len(msg.csvMessage) {
 			buf += fmt.Sprint(v) + ","
 		} else {
 			buf += fmt.Sprint(v)
