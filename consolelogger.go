@@ -24,3 +24,7 @@ func (c *ConsoleLogger) Log(msg *Message) {
 		fmt.Print(stdFormat(msg, c.timeFormat))
 	}
 }
+
+func (c *ConsoleLogger) SetLevel(level int) {
+	c.level = level
+}

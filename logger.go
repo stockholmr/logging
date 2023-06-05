@@ -23,7 +23,8 @@ type Logger interface {
 	Debug(...interface{})
 	Fatal(...interface{})
 	Request(...interface{})
-	Log(message *Message)
+	Log(*Message)
+	SetLevel(int)
 }
 
 func init() {

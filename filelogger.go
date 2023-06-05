@@ -65,6 +65,10 @@ func (f *FileLogger) Close() {
 	<-f.done
 }
 
+func (f *FileLogger) SetLevel(level int) {
+	f.level = level
+}
+
 func (f *FileLogger) Log(msg *Message) {
 	if msg.level >= f.level {
 		f.queue <- msg

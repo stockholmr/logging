@@ -167,6 +167,11 @@ func (r *RotatingFileLogger) Close() {
 	r.fileLogger.Close()
 }
 
+func (r *RotatingFileLogger) SetLevel(level int) {
+	r.level = level
+	r.fileLogger.level = level
+}
+
 func (r *RotatingFileLogger) Log(msg *Message) {
 	if msg.level >= r.level {
 		r.fileLogger.Log(msg)
